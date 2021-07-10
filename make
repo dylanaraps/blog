@@ -50,35 +50,6 @@ txt2html() {
     sed -E "s	%%TITLE%%	$title	"
 }
 
-nav() {
-    # Generate the navigation bar and edit information for each Wiki page.
-
-    # Split the path on '/'.
-    # shellcheck disable=2086
-    {
-        set -f; IFS=/
-        set +f ${page##./}
-        unset IFS
-    }
-
-    # '$nar' contains the generated nav without HTML additions for use in
-    # length calculations below.
-    nav="<a href=\"/$1\">$1</a>" nar=$1
-
-    [ "$2" ] &&             nav="$nav / <a href='/$1/$2'>$2</a>" nar="$nar / $2"
-    [ "${3#index.txt}" ] && nav="$nav / ${3%%.txt}" nar="$nar / ${3%%.txt}"
-
-    # Calculate the amount of padding to add. This will right align the
-    # edit page link. Wiki page length is always 80 columns.
-    nav="$nav$(printf '%*s' "$((80 - ${#nar} - 14))" "")"
-    nav="$nav<a href='$page.txt'>Page source</a>"
-
-    printf '%s\n\n%s\n\n\n' "$nav" \
-        "$(git log -1 \
-        --format="Edited (<a href='$sour_url/commit/%H'>%h</a>) at %as by %an" \
-        "${page##*wiki/}")"
-}
-
 page() {
     pp=${page%/*} title=${page##*/} title=${title%%.txt}
 
@@ -91,19 +62,9 @@ page() {
 
     # GENERATION STEP.
     case $page in
-        # Generate HTML from Wiki pages.
-        */wiki/index.txt)
+        *.txt)
             txt2html < "site/$page" > "docs/${page%%.txt}.html"
         ;;
-
-        # Generate HTML from txt files.
-        *.txt)
-            nav | cat - "site/$page" | txt2html > "docs/${page%%.txt}.html"
-        ;;
-
-        # *.txt)
-        #     txt2html < "site/$page" > "docs/${page%%.txt}.html"
-        # ;;
 
         # Copy over any non-txt files.
         *)
@@ -120,7 +81,6 @@ page() {
 
 main() {
     repo_url=https://github.com
-    sour_url=$repo_url/dylanaraps/blog
 
     rm -rf docs
     mkdir -p docs
