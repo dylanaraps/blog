@@ -1,6 +1,26 @@
 #!/bin/sh -e
 #
-# Simple static site builder.
+# The MIT License (MIT)
+#
+# Copyright (c) 2021 Dylan Araps
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 txt2html() {
     # Transform plain-text input into HTML and insert it into the template.
@@ -16,6 +36,7 @@ txt2html() {
     sed -E "s|(#/)([^ \)]*)|\1<a href=/\2>\2</a>|g" |
     sed -E "s|(@/)([^ \)]*)|\1<a href=${pp##.}/\2>\2</a>|g" |
     sed -E "s|(\\$/)([^ \)]*)|\1<a href=$repo_url/\2>\2</a>|g" |
+    sed -E "s|(%/)([^ \)]*)|\1<a href=$repo_url/dylanaraps/\2>\2</a>|g" |
 
     # Convert [0] into HTML links.
     sed -E "s|^( *)\[([0-9\.]*)\]|\1<span id=\2>[\2]</span>|g" |
@@ -29,7 +50,7 @@ txt2html() {
     sed -E "s	%%TITLE%%	$title	"
 }
 
-wiki_nav() {
+nav() {
     # Generate the navigation bar and edit information for each Wiki page.
 
     # Split the path on '/'.
@@ -50,11 +71,11 @@ wiki_nav() {
     # Calculate the amount of padding to add. This will right align the
     # edit page link. Wiki page length is always 80 columns.
     nav="$nav$(printf '%*s' "$((80 - ${#nar} - 14))" "")"
-    nav="$nav<a href='$wiki_url/edit/master/${page##*wiki/}'>Edit this page</a>"
+    nav="$nav<a href='$page.txt'>Page source</a>"
 
     printf '%s\n\n%s\n\n\n' "$nav" \
-        "$(git submodule foreach --quiet git log -1 \
-        --format="Edited (<a href='$wiki_url/commit/%H'>%h</a>) at %as by %an" \
+        "$(git log -1 \
+        --format="Edited (<a href='$sour_url/commit/%H'>%h</a>) at %as by %an" \
         "${page##*wiki/}")"
 }
 
@@ -75,14 +96,14 @@ page() {
             txt2html < "site/$page" > "docs/${page%%.txt}.html"
         ;;
 
-        */wiki/*.txt)
-            wiki_nav | cat - "site/$page" | txt2html > "docs/${page%%.txt}.html"
-        ;;
-
         # Generate HTML from txt files.
         *.txt)
-            txt2html < "site/$page" > "docs/${page%%.txt}.html"
+            nav | cat - "site/$page" | txt2html > "docs/${page%%.txt}.html"
         ;;
+
+        # *.txt)
+        #     txt2html < "site/$page" > "docs/${page%%.txt}.html"
+        # ;;
 
         # Copy over any non-txt files.
         *)
@@ -98,8 +119,8 @@ page() {
 }
 
 main() {
-    wiki_url=https://github.com/kisslinux/wiki
     repo_url=https://github.com
+    sour_url=$repo_url/dylanaraps/blog
 
     rm -rf docs
     mkdir -p docs

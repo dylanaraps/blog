@@ -1,0 +1,56 @@
+I write open source software released under a permissive license (MIT).
+
+
+$/kisslinux        An independent Linux distribution with a focus on simplicity
+                   and the concept of "less is more". Aimed to be fully
+                   maintainable by a single person.
+
+%/neofetch         A command-line system information tool written in bash 3.2+.
+                   Neofetch displays information about your operating system,
+                   software and hardware in a visually pleasing way.
+
+%/pfetch           A simple system information tool written in POSIX compliant
+                   shell using features built into the language itself.
+
+%/pash             A simple password manager using GPG written in POSIX shell.
+                   Only 120~ lines of code (minus blank lines and comments).
+
+%/pywal            A tool that generates a color palette from the dominant
+                   colors in an image. It then applies the colors system-wide
+                   and on-the-fly in all of your favourite programs.
+
+%/pure-bash-bible  The goal of this book is to document commonly-known and
+                   lesser-known methods of doing various tasks using only
+                   built-in bash features.
+
+%/pure-sh-bible    The goal of this book is to document commonly-known and
+                   lesser-known methods of doing various tasks using only
+                   built-in POSIX shell features.
+
+%/fff              A simple file manager written in bash. Supports image
+                   previews, file operations and other nice features.
+
+%/shfm             A very portable and very tiny file manager written in POSIX
+                   compliant shell with no dependencies.
+
+%/paleta           Change terminal colors on-the-fly independent of terminal
+                   emulator. A generic theme switcher written in C.
+
+%/sowm             An itsy bitsy floating window manager for Xorg (220~ sloc!).
+                   My first foray into C territory.
+
+%/birch            An IRC client written in bash using its built-in networking
+                   capabilities and built-in readline implementation.
+
+%/libdbus-stub     Stub library for software that depends on dbus but is largely
+                   functional without it.
+
+%/root.vim         A vim plugin to automatically set directory to your project's
+                   root based on a known directory or file.
+
+%/pxltrm           A WIP pixel art editor for the terminal written in bash.
+                   Currently not under active development.
+
+%/torque           A TUI client for transmission written in bash.
+
+
