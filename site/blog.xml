@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>Dylan Araps' Blog</title>
+<description>Posts about technology, open source and anything else of interest.</description>
+<link>https://dy1an.xyz</link>
+<ttl>1800</ttl>
+<atom:link href="https://dy1an.xyz/blog.xml" rel="self" type="application/rss+xml" />
+</channel>
+</rss>
